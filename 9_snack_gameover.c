@@ -1,4 +1,4 @@
-// 撞墙游戏结束
+// 上下左右
 //
 #include <curses.h>
 #include "linklist.h"
@@ -7,28 +7,8 @@ struct SnackLinkList *g_snack = NULL;
 int g_head_x = 0;
 int g_head_y = 0;
 
-#define MAP_WIDTH 20
-#define MAP_HEIGHT 20
-
 
 void redraw_map();
-void create_snack();
-void destroy_snack();
-
-void game_over()
-{
-    clear();
-
-    printw("-------------------\n");
-    printw("       GAME OVER\n");
-    printw("-------------------\n");
-
-    destroy_snack();
-    create_snack();
-
-    // 按任意键继续
-    getch();
-}
 
 void process_key()
 {
@@ -53,14 +33,8 @@ void process_key()
             return;
     }
 
-    if (g_head_x <= 0 || g_head_x >= MAP_WIDTH ||
-        g_head_y <= 0 || g_head_y >= MAP_HEIGHT)
-    {
-        game_over();
-    } else {
-        linklist_insert(&g_snack, g_head_x, g_head_y);
-        linklist_delete_tail(g_snack);
-    }
+    linklist_insert(&g_snack, g_head_x, g_head_y);
+    linklist_delete_tail(g_snack);
 }
 
 void init_ncurse()
@@ -81,11 +55,11 @@ void redraw_map()
     // 清屏,光标复位
     clear();
 
-    for (x = 0; x < MAP_WIDTH; x++) {
-        for (y = 0; y < MAP_HEIGHT; y++) {
-            if (x == 0 || x == MAP_WIDTH - 1) {
+    for (x = 0; x < 20; x++) {
+        for (y = 0; y < 20; y++) {
+            if (x == 0 || x == 19) {
                 printw("--");
-            } else if (y == 0 || y == MAP_HEIGHT - 1) {
+            } else if (y == 0 || y == 19) {
                 if (y == 0) {
                     printw("| ");
                 } else {
@@ -104,27 +78,15 @@ void redraw_map()
     }
 }
 
-
-void create_snack()
-{
-    g_snack = linklist_create(1, 1, 3);
-    g_head_x = 1;
-    g_head_y = 3;
-}
-
-void destroy_snack()
-{
-    while(linklist_delete_tail(g_snack) == 0) {
-    }
-}
-
 int main()
 {
     initscr();
 
     init_ncurse();
 
-    create_snack();
+    g_snack = linklist_create(1, 1, 3);
+    g_head_x = 1;
+    g_head_y = 3;
 
     redraw_map();
 

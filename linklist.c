@@ -45,7 +45,7 @@ void linklist_printf(struct SnackLinkList *head, int x, int y)
 }
 
 // return 0成功，-1失败
-void linklist_delete_tail(struct SnackLinkList *head)
+int linklist_delete_tail(struct SnackLinkList *head)
 {
     struct SnackLinkList *prev;
     struct SnackLinkList *del;
@@ -62,7 +62,7 @@ void linklist_delete_tail(struct SnackLinkList *head)
 
     // 只有一个头结点
     if (prev->next == NULL) {
-        return;
+        return -1;
     }
 
     // 2)删除节点
@@ -74,6 +74,8 @@ void linklist_delete_tail(struct SnackLinkList *head)
 
     // 2.3)free del
     free(del);
+
+    return 0;
 }
 
 void linklist_insert(struct SnackLinkList **head, int x, int y)

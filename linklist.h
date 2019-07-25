@@ -28,7 +28,7 @@ int linklist_find(struct SnackLinkList *head, int x, int y);
 void linklist_insert(struct SnackLinkList **head, int x, int y);
 
 // return 0³É¹¦£¬-1Ê§°Ü
-void linklist_delete_tail(struct SnackLinkList *head);
+int linklist_delete_tail(struct SnackLinkList *head);
 
 #ifdef __cplusplus
 }

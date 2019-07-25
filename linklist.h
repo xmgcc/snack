@@ -7,21 +7,23 @@
 extern "C" {
 #endif
 
-struct LinkList {
+struct SnackLinkList {
 	int id;
-	struct LinkList *next;
+    int x;
+    int y;
+	struct SnackLinkList *next;
 };
 
 // 创建链表
 // data，数据数组
 // data_length，数组长度
-struct LinkList *linklist_create(int data[], int data_length);
+struct SnackLinkList *linklist_create(int x[], int y[], int data_length);
 
 // 遍历链表，打印
-void linklist_printf(struct LinkList *head);
+void linklist_printf(struct SnackLinkList *head, int x, int y);
 
 // return 0成功，-1失败
-int linklist_delete(struct LinkList *head, int id);
+int linklist_delete(struct SnackLinkList *head, int id);
 
 #ifdef __cplusplus
 }

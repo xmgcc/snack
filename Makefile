@@ -1,4 +1,4 @@
 all:
-	gcc snack.c -lncurses -o snack
+	gcc linklist.c snack.c -lncurses -o snack
 clean:
 	rm snack

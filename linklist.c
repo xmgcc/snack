@@ -7,23 +7,25 @@
 // 创建链表
 // data，数据数组
 // data_length，数组长度
-struct LinkList *linklist_create(int data[], int data_length)
+struct SnackLinkList *linklist_create(int x[], int y[], int data_length)
 {
-	struct LinkList *head;
-	struct LinkList *tail;
+	struct SnackLinkList *head;
+	struct SnackLinkList *tail;
 	int i;
 
 	// 创建并初始化头结点
-	head = (struct LinkList *)malloc(sizeof(struct LinkList));
+	head = (struct SnackLinkList *)malloc(sizeof(struct SnackLinkList));
 	head->id = -1;
+    head->x = 0;
 	head->next = NULL;
 
 	tail = head;
 	for (i = 0; i < data_length; i++) {
 		// 1)创建节点并初始化
-		struct LinkList *node;
-		node = (struct LinkList *)malloc(sizeof(struct LinkList));
-		node->id = data[i];
+		struct SnackLinkList *node;
+		node = (struct SnackLinkList *)malloc(sizeof(struct SnackLinkList));
+		node->x = x[i];
+		node->y = y[i];
 		node->next = NULL;
 
 		// 2)尾结点连接新节点
@@ -37,22 +39,29 @@ struct LinkList *linklist_create(int data[], int data_length)
 }
 
 // 遍历链表，打印
-void linklist_printf(struct LinkList *head)
+void linklist_printf(struct SnackLinkList *head, int x, int y)
 {
-	struct LinkList *p;
+	struct SnackLinkList *p;
 
 	// for (i = 0; i < n; i++)
 	for (p = head; p != NULL; p = p->next)
 	{
-		printf("%d\n", p->id);
+        if (p->x == x && p->y == y)
+        {
+            printw("[]");
+        }
+        else
+        {
+            printw("  ");
+        }
 	}
 }
 
 // return 0成功，-1失败
-int linklist_delete(struct LinkList *head, int id)
+int linklist_delete(struct SnackLinkList *head, int id)
 {
-	struct LinkList *prev;
-	struct LinkList *del;
+	struct SnackLinkList *prev;
+	struct SnackLinkList *del;
 
 	prev = head;
 	// 1)找到待删除节点的上一个节点

@@ -8,7 +8,6 @@ extern "C" {
 #endif
 
 struct SnackLinkList {
-	int id;
     int x;
     int y;
 	struct SnackLinkList *next;
@@ -25,8 +24,11 @@ void linklist_printf(struct SnackLinkList *head, int x, int y);
 // 找到返回0，找不到返回-1
 int linklist_find(struct SnackLinkList *head, int x, int y);
 
+// 头插法
+void linklist_insert(struct SnackLinkList **head, int x, int y);
+
 // return 0成功，-1失败
-int linklist_delete(struct SnackLinkList *head, int id);
+void linklist_delete_tail(struct SnackLinkList *head);
 
 #ifdef __cplusplus
 }

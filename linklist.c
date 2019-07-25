@@ -97,3 +97,4 @@ void linklist_insert(struct SnackLinkList **head, int x, int y)
     // 3) headÖ¸Ïònode
     *head = node;
 }
+

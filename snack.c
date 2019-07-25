@@ -11,9 +11,13 @@ int g_head_y = 0;
 int g_forward_x = 0;
 int g_forward_y = 0;
 
+// food
+int g_food_x = 0;
+int g_food_y = 0;
+int g_food_exist = 0;
+
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 20
-
 
 void redraw_map();
 void create_snack();
@@ -76,9 +80,8 @@ void process_key()
             return;
     }
 
-    if (g_head_x <= 0 || g_head_x >= MAP_WIDTH ||
-        g_head_y <= 0 || g_head_y >= MAP_HEIGHT)
-    {
+    if (g_head_x <= 0 || g_head_x >= MAP_WIDTH || g_head_y <= 0 ||
+        g_head_y >= MAP_HEIGHT) {
         game_over();
     } else {
         linklist_insert(&g_snack, g_head_x, g_head_y);
@@ -118,6 +121,8 @@ void redraw_map()
                 // 打印蛇的身子或者空格
                 if (linklist_find(g_snack, x, y) == 0) {
                     printw("[]");
+                } else if (g_food_x == x && g_food_y == y) {
+                    printw("# ");
                 } else {
                     printw("  ");
                 }
@@ -126,7 +131,6 @@ void redraw_map()
         printw("\n");
     }
 }
-
 
 void create_snack()
 {
@@ -140,7 +144,23 @@ void create_snack()
 
 void destroy_snack()
 {
-    while(linklist_delete_tail(g_snack) == 0) {
+    while (linklist_delete_tail(g_snack) == 0) {
+    }
+}
+
+void food()
+{
+    // 创建food
+    if (!g_food_exist) {
+        g_food_exist = 1;
+        g_food_x = rand() % MAP_WIDTH;
+        g_food_y = rand() % MAP_HEIGHT;
+    }
+
+    // 吃到food
+    if (g_head_x == g_food_x && g_head_y == g_food_y) {
+        g_food_exist = 0;
+        linklist_insert(&g_snack, g_food_x, g_food_y);
     }
 }
 
@@ -157,6 +177,8 @@ int main()
 
     while (1) {
         process_key();
+
+        food();
         redraw_map();
     }
 

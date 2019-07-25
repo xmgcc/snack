@@ -1,7 +1,6 @@
-#include "linklist.h"
-#include "linklist.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "linklist.h"
 
 
 // 创建链表
@@ -19,8 +18,8 @@ struct SnackLinkList *linklist_create(int x, int y, int length)
     // (0,0), (1,0), (2, 0)
     // (0,0), (1,0)为蛇身，
     // (2,0)为蛇头
-    head->x = x + length - 1;
-    head->y = y;
+    head->y = y + length - 1;
+    head->x = x;
 	head->next = NULL;
 
 	tail = head;
@@ -30,8 +29,8 @@ struct SnackLinkList *linklist_create(int x, int y, int length)
 		// 1)创建节点并初始化
 		struct SnackLinkList *node;
 		node = (struct SnackLinkList *)malloc(sizeof(struct SnackLinkList));
-		node->x = x + i;
-		node->y = y;
+		node->y = y + i;
+		node->x = x;
 		node->next = NULL;
 
 		// 2)尾结点连接新节点

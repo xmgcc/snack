@@ -15,12 +15,15 @@ struct SnackLinkList {
 };
 
 // 创建链表
-// data，数据数组
-// data_length，数组长度
-struct SnackLinkList *linklist_create(int x[], int y[], int data_length);
+// 在x,y位置创建长度为length的蛇
+struct SnackLinkList *linklist_create(int x, int y, int length);
 
 // 遍历链表，打印
 void linklist_printf(struct SnackLinkList *head, int x, int y);
+
+// 查找蛇是否在坐标x,y
+// 找到返回0，找不到返回-1
+int linklist_find(struct SnackLinkList *head, int x, int y);
 
 // return 0成功，-1失败
 int linklist_delete(struct SnackLinkList *head, int id);

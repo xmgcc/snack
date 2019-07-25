@@ -5,27 +5,33 @@
 
 
 // 创建链表
-// data，数据数组
-// data_length，数组长度
-struct SnackLinkList *linklist_create(int x[], int y[], int data_length)
+struct SnackLinkList *linklist_create(int x, int y, int length)
 {
 	struct SnackLinkList *head;
 	struct SnackLinkList *tail;
 	int i;
 
-	// 创建并初始化头结点
+	// 蛇头, 创建并初始化
 	head = (struct SnackLinkList *)malloc(sizeof(struct SnackLinkList));
 	head->id = -1;
-    head->x = 0;
+    // 蛇头在最前面
+    // 0, 0创建长度为3的蛇
+    // (0,0), (1,0), (2, 0)
+    // (0,0), (1,0)为蛇身，
+    // (2,0)为蛇头
+    head->x = x + length - 1;
+    head->y = y;
 	head->next = NULL;
 
 	tail = head;
-	for (i = 0; i < data_length; i++) {
+
+    // length-1创建蛇身
+	for (i = 0; i < length - 1; i++) {
 		// 1)创建节点并初始化
 		struct SnackLinkList *node;
 		node = (struct SnackLinkList *)malloc(sizeof(struct SnackLinkList));
-		node->x = x[i];
-		node->y = y[i];
+		node->x = x + i;
+		node->y = y;
 		node->next = NULL;
 
 		// 2)尾结点连接新节点
@@ -36,6 +42,22 @@ struct SnackLinkList *linklist_create(int x[], int y[], int data_length)
 	}
 
 	return head;
+}
+
+int linklist_find(struct SnackLinkList *head, int x, int y)
+{
+	struct SnackLinkList *p;
+
+	// for (i = 0; i < n; i++)
+	for (p = head; p != NULL; p = p->next)
+	{
+        if (p->x == x && p->y == y)
+        {
+            return 0;
+        }
+	}
+
+    return -1;
 }
 
 // 遍历链表，打印

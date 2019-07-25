@@ -57,7 +57,11 @@ void init_map()
                 }
             } else {
                 // 打印蛇的身子或者空格
-                linklist_printf(&g_snack, x, y);
+                if (linklist_find(&g_snack, x, y) == 0) {
+                    printw("[]");
+                } else {
+                    printw("  ");
+                }
             }
         }
         printw("\n");
@@ -67,6 +71,8 @@ void init_map()
 int main()
 {
     initscr();
+    struct SnackLinkList node = {0, 3, 2, NULL};
+    g_snack.next = &node;
 
     init_map();
 

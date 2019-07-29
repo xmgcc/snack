@@ -1,16 +1,53 @@
 #include <curses.h>
+#include <stdlib.h>
 
 
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 20
 
+//
+// 链表操作
+//
 
 struct Snack {
     // x坐标
     int x;
+
     // y坐标
     int y;
+
+    // 单链表节点
+    struct Snack *next;
 };
+
+
+// 链表遍历
+// 空实现
+// 污染,不可重入
+// x坐标
+// y坐标
+// 0表示找到节点，-1表示没找到对应的节点
+int linklist_find(struct Snack *head, int x, int y)
+{
+    struct Snack *p;
+
+    p = head;
+    while(p != NULL)
+    {
+        // 找到节点
+        if (p->x ==x && p->y == y)
+        {
+            return 0;
+        }
+
+        p = p->next;
+    }
+
+    return -1;
+}
+
+//////////////////////////////////////////
+
 
 // 全局变量, g_前缀定义变量
 struct Snack g_snack;
@@ -52,7 +89,8 @@ void init_map3()
                 {
                     // 2,3,4,5...18
                     // 遇到蛇的节点就打印[]，否则打印空格
-                    if (x == g_snack.x && y == g_snack.y)
+                    //if (x == g_snack.x && y == g_snack.y)
+                    if (linklist_find(&g_snack, x, y) == 0)
                     {
                         printw("[]");
                     }
@@ -144,14 +182,29 @@ void init_map()
     }
 }
 
+void create_snack()
+{
+    g_snack.x = 3;
+    g_snack.y = 3;
+    g_snack.next = NULL;
+
+    struct Snack *node = (struct Snack*)malloc(sizeof(struct Snack));
+    node->x = 3;
+    node->y = 4;
+    node->next = NULL;
+
+    g_snack.next=node;
+}
+
 int main()
 {
     // init
     initscr();
 
-    g_snack.x = 3;
-    g_snack.y = 3;
-    
+    // 创建贪吃蛇
+    create_snack();
+
+    // 创建地图
     init_map3();
 
     // wait key

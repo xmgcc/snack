@@ -69,82 +69,82 @@ void init_map3()
 }
 
 
-void init_map2()
-{
-    int x;
-    int y;
-
-    for (x = 0; x < MAP_HEIGHT; x++)
-    {
-        for (y = 0; y < MAP_WIDTH; y++)
-        {
-            if (x == 0 || x == 19)
-            {
-                // red
-                printw("##");
-            }
-            else 
-            {
-                // green
-                if (y == 0 || y == 19)
-                {
-                    if (y == 0)
-                    {
-                        printw("# ");
-                    }
-                    else
-                    {
-                        printw(" #");
-                    }
-                }
-                else
-                {
-                    printw("  ");
-                }
-            }
-        }
-        printw("\n");
-    }
-}
-    
-void init_map()
-{
-    int x;
-    int y;
-    // print
-    for (x = 0; x < MAP_WIDTH; x++)
-    {
-        for (y = 0; y < MAP_HEIGHT; y++)
-        {
-            // 0 || 19
-            if (y == 0 || y == MAP_HEIGHT - 1)
-            {
-                if (y == 0)
-                {
-                    printw("# ");
-                }
-                else
-                {
-                    printw(" #");
-                }
-            }
-            else
-            {
-                // 0 || 19
-                if (x == 0 || x == MAP_WIDTH -1)
-                {
-                    printw("##");
-                }
-                else
-                {
-                    printw("  ");
-                }
-            }
-        }
-        printw("\n");
-    }
-}
-
+/* void init_map2() */
+/* { */
+/*     int x; */
+/*     int y; */
+/*  */
+/*     for (x = 0; x < MAP_HEIGHT; x++) */
+/*     { */
+/*         for (y = 0; y < MAP_WIDTH; y++) */
+/*         { */
+/*             if (x == 0 || x == 19) */
+/*             { */
+/*                 // red */
+/*                 printw("##"); */
+/*             } */
+/*             else  */
+/*             { */
+/*                 // green */
+/*                 if (y == 0 || y == 19) */
+/*                 { */
+/*                     if (y == 0) */
+/*                     { */
+/*                         printw("# "); */
+/*                     } */
+/*                     else */
+/*                     { */
+/*                         printw(" #"); */
+/*                     } */
+/*                 } */
+/*                 else */
+/*                 { */
+/*                     printw("  "); */
+/*                 } */
+/*             } */
+/*         } */
+/*         printw("\n"); */
+/*     } */
+/* } */
+/*      */
+/* void init_map() */
+/* { */
+/*     int x; */
+/*     int y; */
+/*     // print */
+/*     for (x = 0; x < MAP_WIDTH; x++) */
+/*     { */
+/*         for (y = 0; y < MAP_HEIGHT; y++) */
+/*         { */
+/*             // 0 || 19 */
+/*             if (y == 0 || y == MAP_HEIGHT - 1) */
+/*             { */
+/*                 if (y == 0) */
+/*                 { */
+/*                     printw("# "); */
+/*                 } */
+/*                 else */
+/*                 { */
+/*                     printw(" #"); */
+/*                 } */
+/*             } */
+/*             else */
+/*             { */
+/*                 // 0 || 19 */
+/*                 if (x == 0 || x == MAP_WIDTH -1) */
+/*                 { */
+/*                     printw("##"); */
+/*                 } */
+/*                 else */
+/*                 { */
+/*                     printw("  "); */
+/*                 } */
+/*             } */
+/*         } */
+/*         printw("\n"); */
+/*     } */
+/* } */
+/*  */
 void create_snack()
 {
     g_snack = (struct Snack*)malloc(sizeof(struct Snack));
@@ -157,6 +157,7 @@ void create_snack()
     // &g_snack 2级指针
     linklist_insert(&g_snack, 3, 4);
     g_snack = linklist_insert2(g_snack, 3, 5);
+
 }
 
 // CTRL + C
@@ -171,19 +172,20 @@ void handle_keys()
     {
         // wait key
         key = getch();
-        //printw("%c %d %o\n", key, key, key);
         switch(key) {
             case KEY_DOWN:
-                printw("KEY_DOWN\n");
                 break;
             case KEY_UP:
-                printw("KEY_UP\n");
                 break;
             case KEY_LEFT:
-                printw("KEY_LEFT\n");
                 break;
             case KEY_RIGHT:
-                printw("KEY_RIGHT\n");
+                // 清屏，光标复位
+                clear();
+
+                linklist_insert(&g_snack, g_snack->x, g_snack->y + 1);
+                linklist_delete(g_snack);
+                init_map3();
                 break;
             default:
                 break;
@@ -197,13 +199,13 @@ int main()
     initscr();
 
     // 创建贪吃蛇
-    //create_snack();
+    create_snack();
 
     // 创建地图
-    //init_map3();
+    init_map3();
 
     handle_keys();
-    
+
     // destroy
     endwin();
     return 0;

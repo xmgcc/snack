@@ -65,3 +65,34 @@ struct Snack *linklist_insert2(struct Snack *head, int x, int y)
     // 3) 返回新的头节点
     return node;
 }
+
+void linklist_delete(struct Snack *head)
+{
+    struct Snack *p;
+    struct Snack *tmp;
+
+    p = head;
+    while(NULL != p && NULL != p->next) {
+        if (NULL == p->next->next) {
+            // 保存待删除节点
+            tmp = p->next;
+            // 从链表删除节点
+            p->next = NULL;
+            // 释放节点
+            free(tmp);
+            break;
+        }
+        p = p->next;
+    }
+}
+
+void linklist_print(struct Snack *head)
+{
+    struct Snack *p;
+    p = head;
+    while (NULL != p) {
+        printf("%d,%d\n", p->x, p->y);
+        p = p->next;
+    }
+}
+

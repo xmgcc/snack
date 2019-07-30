@@ -10,12 +10,13 @@
 // 一级指针  *
 struct Snack *g_snack;
 
-
+// 上一次移动方向
+int g_direction = KEY_RIGHT;
 
 //////////////////////////////////////////
 
 
-void init_map3()
+void draw_map()
 {
     // 局部变量
     int x;
@@ -160,6 +161,43 @@ void create_snack()
 
 }
 
+int is_invaid_input(int key)
+{
+    if (key == KEY_UP || key == KEY_RIGHT || key == KEY_DOWN || key == KEY_LEFT) {
+        // if当前方向跟上一次的移动方向g_direction相反
+        if ((KEY_RIGHT == g_direction && KEY_LEFT == key) ||
+            (KEY_LEFT == g_direction && KEY_RIGHT == key) ||
+            (KEY_UP == g_direction && KEY_DOWN == key) ||
+            (KEY_DOWN == g_direction && KEY_UP == key)) {
+            return -1;
+        }
+
+        // 设置g_direction=当前方向
+        g_direction = key;
+
+        return 0;
+    }
+
+    return -1;
+}
+
+
+// 返回-1表示输入无效
+int is_invaid_input2(int key)
+{
+    if ((KEY_RIGHT == g_direction && KEY_LEFT == key) ||
+        (KEY_LEFT == g_direction && KEY_RIGHT == key) ||
+        (KEY_UP == g_direction && KEY_DOWN == key) ||
+        (KEY_DOWN == g_direction && KEY_UP == key)) {
+        return -1;
+    } else {
+        g_direction = key;
+        return 0;
+    }
+
+    return -1;
+}
+
 // CTRL + C
 void handle_keys()
 {
@@ -170,26 +208,37 @@ void handle_keys()
     keypad(stdscr, TRUE);
     while(1)
     {
-        // wait key
+        // 1)获取当前按键
         key = getch();
+
+        // 2) 比较当前按键
+        if (is_invaid_input2(key) < 0) {
+            continue;
+        }
+        // 清屏，光标复位
+        clear();
         switch(key) {
             case KEY_DOWN:
+                linklist_insert(&g_snack, g_snack->x + 1, g_snack->y);
+                linklist_delete(g_snack);
                 break;
             case KEY_UP:
+                linklist_insert(&g_snack, g_snack->x - 1, g_snack->y);
+                linklist_delete(g_snack);
                 break;
             case KEY_LEFT:
+                linklist_insert(&g_snack, g_snack->x, g_snack->y - 1);
+                linklist_delete(g_snack);
                 break;
             case KEY_RIGHT:
-                // 清屏，光标复位
-                clear();
-
                 linklist_insert(&g_snack, g_snack->x, g_snack->y + 1);
                 linklist_delete(g_snack);
-                init_map3();
                 break;
             default:
                 break;
         }
+
+        draw_map();
     }
 }
 
@@ -202,7 +251,7 @@ int main()
     create_snack();
 
     // 创建地图
-    init_map3();
+    draw_map();
 
     handle_keys();
 

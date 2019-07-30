@@ -1,56 +1,19 @@
 #include <curses.h>
 #include <stdlib.h>
-
+#include "linklist2.h"
 
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 20
 
-//
-// 链表操作
-//
 
-struct Snack {
-    // x坐标
-    int x;
-
-    // y坐标
-    int y;
-
-    // 单链表节点
-    struct Snack *next;
-};
+// 全局变量, g_前缀定义变量
+// 一级指针  *
+struct Snack *g_snack;
 
 
-// 链表遍历
-// 空实现
-// 污染,不可重入
-// x坐标
-// y坐标
-// 0表示找到节点，-1表示没找到对应的节点
-int linklist_find(struct Snack *head, int x, int y)
-{
-    struct Snack *p;
-
-    p = head;
-    while(p != NULL)
-    {
-        // 找到节点
-        if (p->x ==x && p->y == y)
-        {
-            return 0;
-        }
-
-        p = p->next;
-    }
-
-    return -1;
-}
 
 //////////////////////////////////////////
 
-
-// 全局变量, g_前缀定义变量
-struct Snack g_snack;
 
 void init_map3()
 {
@@ -90,7 +53,7 @@ void init_map3()
                     // 2,3,4,5...18
                     // 遇到蛇的节点就打印[]，否则打印空格
                     //if (x == g_snack.x && y == g_snack.y)
-                    if (linklist_find(&g_snack, x, y) == 0)
+                    if (linklist_find(g_snack, x, y) == 0)
                     {
                         printw("[]");
                     }
@@ -184,16 +147,48 @@ void init_map()
 
 void create_snack()
 {
-    g_snack.x = 3;
-    g_snack.y = 3;
-    g_snack.next = NULL;
+    g_snack = (struct Snack*)malloc(sizeof(struct Snack));
+    g_snack->x = 3;
+    g_snack->y = 3;
+    g_snack->next = NULL;
 
-    struct Snack *node = (struct Snack*)malloc(sizeof(struct Snack));
-    node->x = 3;
-    node->y = 4;
-    node->next = NULL;
+    // 改变一个变量的值要传地址
+    // g_snack 一级指针
+    // &g_snack 2级指针
+    linklist_insert(&g_snack, 3, 4);
+    g_snack = linklist_insert2(g_snack, 3, 5);
+}
 
-    g_snack.next=node;
+// CTRL + C
+void handle_keys()
+{
+    int key;
+
+    noecho();
+
+    keypad(stdscr, TRUE);
+    while(1)
+    {
+        // wait key
+        key = getch();
+        //printw("%c %d %o\n", key, key, key);
+        switch(key) {
+            case KEY_DOWN:
+                printw("KEY_DOWN\n");
+                break;
+            case KEY_UP:
+                printw("KEY_UP\n");
+                break;
+            case KEY_LEFT:
+                printw("KEY_LEFT\n");
+                break;
+            case KEY_RIGHT:
+                printw("KEY_RIGHT\n");
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 int main()
@@ -202,13 +197,12 @@ int main()
     initscr();
 
     // 创建贪吃蛇
-    create_snack();
+    //create_snack();
 
     // 创建地图
-    init_map3();
+    //init_map3();
 
-    // wait key
-    getch();
+    handle_keys();
     
     // destroy
     endwin();
